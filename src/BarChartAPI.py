@@ -91,6 +91,8 @@ class BarChartAPI:
             RETURNS    :
                             None 
         """
+        val = None
+        
         self._initialize_session()
         # API endpoint for the price data
         price_url = f"https://www.barchart.com/proxies/core-api/v1/quotes/get"
@@ -109,7 +111,7 @@ class BarChartAPI:
         except Exception as e:
             print(f"DEBUG: Spot Fetch Failed: {e}")
             
-        return None 
+        return val
     
     def MarketData(self):
         """

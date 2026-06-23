@@ -82,6 +82,7 @@ class Calculations:
         try:            
             em_dist         = spot * (vol_constant / (252**0.5)) 
             eh, el          = spot + em_dist, spot - em_dist
+
         except:
             print("\t\t|EXCEPTION: Calculations::" + str(inspect.currentframe().f_code.co_name) + " - Ran into an exception:" )
             for entry in sys.exc_info():
@@ -122,6 +123,8 @@ class Calculations:
                         break
                 if not found_flip:
                     zg_strike = net_gex.abs().idxmin()
+           # if (spot/zg_strike) > 5 :
+           #     zg_strike *= 10
         except: 
             print("\t\t|EXCEPTION: Calculations::" + str(inspect.currentframe().f_code.co_name) + " - Ran into an exception:" )
             for entry in sys.exc_info():
@@ -171,6 +174,7 @@ class Calculations:
         try:
             vh = max(zg_strike, spot) + (em_dist * 0.25)
             vl = min(zg_strike, spot) - (em_dist * 0.25)
+
         except:
             print("\t\t|EXCEPTION: Calculations::" + str(inspect.currentframe().f_code.co_name) + " - Ran into an exception:" )
             for entry in sys.exc_info():

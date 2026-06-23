@@ -57,16 +57,17 @@ class ConfluenceEngine:
                         benchmarks.update( { bKey : lvl } )
                         
             symbols.remove( base)
-            for pos, symbol in enumerate( symbols ) :                        
-                multiplier  = 10 if data[base]['spot'] < 1_000  else data[base]['spot']/data[symbol]['spot']     # trying to account for SPY  type assets  symbol =="SPY"         
+            for pos, symbol in enumerate( symbols ) :                
+                multiplier  = data[base]['spot']/data[symbol]['spot']  #10 if data[base]['spot'] < 1_000  else data[base]['spot']/data[symbol]['spot']     # trying to account for SPY  type assets  symbol =="SPY"                
                 temp        = {}
                 for key,values in data[symbol]['data'].items() :
                     newKeyValue  =  round(float(key*multiplier) ,2)
                     temp.update( { newKeyValue : data[symbol]['data'][key]})
+                    print(f"[DEBUG] {newKeyValue} : { data[symbol]['data'][key]} ")
                     if values['abbrev'] in Extraneous_Levels :
-                        if ( upper(values['abbrev'][1]) =='H' and newKeyValue > benchmarks.get(values['abbrev'],0) ) :
+                        if ( values['abbrev'][1].upper() =='H' and newKeyValue > benchmarks.get(values['abbrev'],0) ) :
                              benchmarks.update({values['abbrev']: newKeyValue})
-                        elif ( upper(values['abbrev'][1]) =='L' and newKeyValue < benchmarks.get(values['abbrev'],1_000_000) ):
+                        elif ( values['abbrev'][1].upper() =='L' and newKeyValue < benchmarks.get(values['abbrev'],1_000_000) ):
                              benchmarks.update({values['abbrev']: newKeyValue })
                    
                 data[symbol]['data'] = temp                
@@ -384,8 +385,7 @@ def UserProvidedSymbols()-> str :
             df, is_future   = calc.FuturesStrikePrice(symbol=ticker[0], data=df, spot=ticker[1])
             if pos == 0: # ONLY CALCULATE FOR BASE ASSET
                 eh, el , em_dist   = calc.ExpectedHighLow( spot=spot)
-                zg_strike          = calc.ZG_Strike( spot =spot, df =df , eh=eh, el=el )
-                print(f"[DEBUG] {base} ZG STRIKE : {zg_strike} ")
+                zg_strike          = calc.ZG_Strike( spot =spot, df =df , eh=eh, el=el )                
                 vh , vl            = calc.VolatilityHighLow( zg_strike=zg_strike,spot=spot, em_dist=em_dist) 
 
                                    

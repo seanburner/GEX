@@ -52,9 +52,8 @@ def UseDataFiles()->str:
     try:
         print("\t\t Using Data Files as input   ")
         dirPath             = input("Where are the data files located: " )
-        fileExt             = input("What is the file extension for the data file(s) [csv, dat,rtf ] : ")
-        files               =  {f.stem:f  for f in Path(dirPath).iterdir()  if f.suffix =="."+fileExt }
-        
+        fileExt             = input("What is the file extension for the data file(s) [csv, dat,rtf ] : ")            
+        files               =  {f.stem:f  for f in Path(dirPath).iterdir()  if f.suffix =="."+fileExt }        
         data.update( { key: confl.LoadFileData( fileName=value) for key,value in files.items() }  )
 
         while  not ( base in list( files.keys() ) ) :
@@ -114,15 +113,16 @@ def UserProvidedSymbols()-> str :
         
         # Get SPOT , for better multiplier calc do it as quickly as possible 
         for pos, ticker in enumerate(symbols):
-            print(f"[ * ] Getting Spot for : {ticker}")
             barChart    = BarChartAPI( symbol = ticker )
             spot        = barChart.SpotPrice()
             temp        = [ ticker, spot]            
             tickers.append( temp )
+            print(f"[ * ] Getting Spot for : {ticker} -> ${spot}")
 
         #Get Market Data
         cw_data = pd.DataFrame( )       
-        pw_data = pd.DataFrame( ) 
+        pw_data = pd.DataFrame( )
+        print(f"[DEBUG] TICKERS : {tickers}")
         for pos, ticker in enumerate(tickers):            
             barChart    = BarChartAPI( symbol = tickers[pos][0] )
             df          = barChart.MarketData()
@@ -132,12 +132,14 @@ def UserProvidedSymbols()-> str :
                 
             #with open(f"data/{ticker[0]}.pkl", "rb") as file :
             #    df = pickle.load(  file )                           
-            
+
+            spot            = ticker[1]
             df['source']    = ticker[0]
             df              = calc.Greeks_And_Gex( df=df , spot=tickers[pos][1])            
             df              = calc.DataCleaning( df=df)
             df, is_future   = calc.FuturesStrikePrice(symbol=ticker[0], data=df, spot=ticker[1])
             if pos == 0: # ONLY CALCULATE FOR BASE ASSET
+                print(f"[DEBUG] {base} SPOT : {spot} ")
                 eh, el , em_dist   = calc.ExpectedHighLow( spot=spot)
                 zg_strike          = calc.ZG_Strike( spot =spot, df =df , eh=eh, el=el )
                 print(f"[DEBUG] {base} ZG STRIKE : {zg_strike} ")
