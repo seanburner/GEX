@@ -15,7 +15,8 @@ import inspect
 import numpy    as np
 import pandas   as pd
 
-from Calculations import Calculations
+from pandas 		import DataFrame
+from Calculations 	import Calculations
 
 Extraneous_Levels = ['VH','VL','EH','EL']       # needs to be centralized, also in ConflueneEngine 
 

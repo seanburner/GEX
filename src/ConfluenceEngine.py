@@ -16,6 +16,7 @@ import inspect
 import pandas   as pd
 import numpy    as np
 
+from pandas                     import DataFrame 
 from pathlib                    import Path
 
 from Calculations               import Calculations
@@ -175,7 +176,7 @@ class ConfluenceEngine:
         
         return base 
     
-    def BuildDictFromData( self, ticker : list, cw_data:DataFrame, pw_data: Data, zg_strike: float , eh:float,el:float, vh:float, vl:float) -> {}:
+    def BuildDictFromData( self, ticker : list, cw_data:DataFrame, pw_data: DataFrame, zg_strike: float , eh:float,el:float, vh:float, vl:float) -> dict:
         """
             Build the templated dictionary from the market data dataframe
             PARAMETERS :

@@ -14,6 +14,7 @@ import requests
 import numpy    as np
 import pandas   as pd
 
+from pandas  import DataFrame
 
 class Calculations:
     def __init__(self)-> None :
@@ -182,7 +183,7 @@ class Calculations:
         return vh,vl 
                 
             
-    def Greeks_And_Gex(self, df : Dataframe , spot : float) -> Dataframe:
+    def Greeks_And_Gex(self, df : DataFrame , spot : float) -> DataFrame:
         """
             Contained business logic for calculating the Greeks and GEX info
             PARAMETERS  :
